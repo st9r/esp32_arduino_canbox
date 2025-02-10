@@ -1,14 +1,42 @@
-Simple example of implementation canbox RISE protocol to communicate with almost any Android Head Unit.
-Works on Arduino Uno
-You just need to change sketch to suit your needs.
+# CANBOX RISE Protocol for Arduino
 
-If using Arduino / LGT8F328P (or any with 5V IO) you need logic converter or simple voltage divider for TX (Arduino) -> RX HU line.
-RX Arduino < TX HU Not Connected!
+This is a simple implementation of the CANBOX RISE protocol to communicate with almost any Android Head Unit.
+It works on **Arduino Uno**.
+You just need to modify the sketch to suit your needs.
 
+## Hardware Considerations
 
+If using **Arduino / LGT8F328P** (or any microcontroller with **5V IO**), you need a **logic level converter** or a simple **voltage divider** for the TX line (**Arduino TX -> Head Unit RX**).
 
+**Connection diagram:**
 
-Job went really smooth thanks the following repos:
-https://github.com/morcibacsi/JunsunPSARemote
+```
+Arduino TX ----[1.8kΩ]----+---- Head Unit RX
+                           |
+                         [3.3kΩ]
+                           |
+                          GND
+```
+**Alternative:** 1kΩ and 2kΩ resistors also work.
 
-https://github.com/smartgauges/canbox
+**Important:**
+- **RX Arduino < TX Head Unit** → Not Connected!
+
+## RISE Protocol Structure
+
+```
+0x2E 0x01 0x02 0x01 0x01 0xDB
+ │    │    │   └───┼───┘  └────── checksum
+ │    │    │       └───────────── data bytes
+ │    │    └───────────────────── length of the payload
+ │    └────────────────────────── function id
+ └─────────────────────────────── header
+```
+
+**Baud Rate:** `38400`
+
+## Credits
+
+This project was made possible thanks to the following repositories:
+- [JunsunPSARemote](https://github.com/morcibacsi/JunsunPSARemote)
+- [Smart Gauges CANBOX](https://github.com/smartgauges/canbox)
